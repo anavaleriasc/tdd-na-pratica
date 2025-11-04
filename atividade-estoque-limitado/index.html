@@ -15,21 +15,42 @@
     <script src="https://code.jquery.com/qunit/qunit-1.18.0.js"></script>
 
     <script>
+      function calcularTroco(precoDoProduto, valorPago, estoque = null) {
         const cedulasDisponiveis = [100, 50, 20, 10, 5, 2, 1]
-        function calcularTroco(precoDoProduto, valorPago) {
-            let diferenca = valorPago - precoDoProduto
-            let troco = []
+        let diferenca = valorPago - precoDoProduto
+        const troco = []
 
-            cedulasDisponiveis.forEach((cedula) => {
-            // Continuar adicionando a cédula atual enquanto for maior que a diferença
-            while (diferenca >= cedula) {
-                troco.push(cedula)
-                diferenca = diferenca - cedula
-            }
-            })
-
-            return troco
+        // Verifica se o valor pago é suficiente
+        if (diferenca < 0) {
+          throw new Error('Valor pago insuficiente.')
         }
+
+        // Caso 1: estoque ilimitado (versão original)
+        if (estoque === null) {
+          for (let cedula of cedulasDisponiveis) {
+            while (diferenca >= cedula) {
+              troco.push(cedula)
+              diferenca -= cedula
+            }
+          }
+        } 
+        // Caso 2: estoque limitado
+        else {
+          for (let cedula of cedulasDisponiveis) {
+            while (diferenca >= cedula && estoque[cedula] > 0) {
+              troco.push(cedula)
+              diferenca -= cedula
+              estoque[cedula]-- // reduz o estoque
+            }
+          }
+          if (diferenca > 0) {
+            throw new Error('Não é possível fornecer o troco exato com o estoque atual.')
+          }
+        }
+
+        return troco
+      }
+
 
     </script>
 
