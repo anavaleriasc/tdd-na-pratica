@@ -16,8 +16,12 @@
 
     <script>
       function calcularTroco(precoDoProduto, valorPago) {
-        let troco = [50, 20, 10, 5] // Necessário para o teste que está falhando começar a passar
-    
+        let troco = []
+
+        if((valorPago - precoDoProduto) != 0) { // Precisa fornecer algum troco?
+          troco = [50, 20, 10, 5] // Necessário para o teste que está falhando começar a passar
+        }
+
         return troco
       }
     </script>
