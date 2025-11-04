@@ -16,18 +16,21 @@
 
     <script>
       function calcularTroco(precoDoProduto, valorPago) {
-        let troco = []
+            const cedulasDisponiveis = [100, 50, 20, 10, 5, 2, 1]
+            
+            let diferenca = valorPago - precoDoProduto
+            let troco = []
 
-        if ((valorPago - precoDoProduto) != 0) { // Precisa fornecer algum troco?
-          if (precoDoProduto == 486 && valorPago == 600) {
-            troco = [100, 10, 2, 2]
-          } else if (precoDoProduto == 215 && valorPago == 300) {
-            troco = [50, 20, 10, 5]
-          }
-        }
+            for (let cedula of cedulasDisponiveis) {
+                while (diferenca >= cedula) {
+                    troco.push(cedula)
+                    diferenca -= cedula
+                }
+            }
 
         return troco
-      }
+        }
+
     </script>
 
     <script>
@@ -46,6 +49,12 @@
       test('calcularTroco(486, 600) deve retornar [100, 10, 2, 2]', (assert) => {
         const trocoCalculado = calcularTroco(486, 600)
         const trocoEsperado = [100, 10, 2, 2]
+        assert.deepEqual(trocoCalculado, trocoEsperado)
+      })
+
+      test('calcularTroco(12, 200) deve retornar [100, 50, 20, 10, 5, 2, 1]', (assert) => {
+        const trocoCalculado = calcularTroco(12, 200)
+        const trocoEsperado = [100, 50, 20, 10, 5, 2, 1]
         assert.deepEqual(trocoCalculado, trocoEsperado)
       })
     </script>
